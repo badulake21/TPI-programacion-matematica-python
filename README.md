@@ -20,6 +20,9 @@ https://github.com/badulake21/TPI-programacion-matematica-python
 ### Video Explicativo
 https://youtu.be/x7WNkg4OHSI
 
+### Informe PDF
+https://github.com/badulake21/TPI-programacion-matematica-python/blob/main/Documentaci%C3%B3n%20acad%C3%A9mica%20y%20t%C3%A9cnica.pdf
+
 ## Ejecución
 
 1. Descargar el proyecto.
