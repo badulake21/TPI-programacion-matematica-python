@@ -1,6 +1,10 @@
 import csv
+import os
 
-ARCHIVO_CSV = "paises.csv"
+CARPETA_ACTUAL = os.path.dirname(os.path.abspath(__file__))
+ARCHIVO_CSV = os.path.join(CARPETA_ACTUAL, "paises.csv")
+
+#Lee los países desde el archivo CSV y los convierte en diccionarios.
 def leer_paises():
     paises = []
 
@@ -28,20 +32,21 @@ def leer_paises():
 
     return paises
 
+#Guarda la lista actualizada de países en el archivo CSV.
 def guardar_paises(paises):
     with open(ARCHIVO_CSV, "w", encoding="utf-8", newline="") as archivo:
         campos = ["nombre", "poblacion", "superficie", "continente"]
         escritor = csv.DictWriter(archivo, fieldnames=campos)
         escritor.writeheader()
         escritor.writerows(paises)
-
+#Función para solicitar ingresar texto.
 def pedir_texto(mensaje):
     while True:
         texto = input(mensaje).strip()
         if texto:
             return texto
         print("El campo no puede estar vacío.")
-
+#Función para solicitar un número entero al usuario.
 def pedir_entero(mensaje):
     while True:
         try:
@@ -54,7 +59,7 @@ def pedir_entero(mensaje):
 
 def mostrar_paises(paises):
     if not paises:
-        print("No hay países para mostrar.")
+        print("\nNo se encontraron países con esos datos.")
         return
 
     for pais in paises:
@@ -66,6 +71,12 @@ def mostrar_paises(paises):
 def agregar_pais(paises):
     print("\nAgregar país")
     nombre = pedir_texto("Nombre: ")
+
+    for pais in paises:
+        if pais["nombre"].lower() == nombre.lower():
+            print("Ese país ya se encuentra agregado.")
+            return
+    
     poblacion = pedir_entero("Población: ")
     superficie = pedir_entero("Superficie en km2: ")
     continente = pedir_texto("Continente: ")
@@ -119,7 +130,7 @@ def filtrar_por_rango(paises, campo):
     maximo = pedir_entero("Valor máximo: ")
 
     if minimo > maximo:
-        print("El mínimo no puede ser mayor que el máximo.")
+        print("\nEl valor mínimo no puede ser mayor que el máximo.")
         return
 
     resultados = []
@@ -131,10 +142,10 @@ def filtrar_por_rango(paises, campo):
 
 def ordenar_paises(paises):
     print("\nOrdenar por:")
-    print("1. Nombre")
+    print("\n1. Nombre")
     print("2. Población")
     print("3. Superficie")
-    opcion = input("Opcion: ").strip()
+    opcion = input("\nOpción: ").strip()
 
     campos = {"1": "nombre", "2": "poblacion", "3": "superficie"}
     campo = campos.get(opcion)
@@ -143,8 +154,17 @@ def ordenar_paises(paises):
         print("Opción inválida.")
         return
 
-    direccion = input("Ascendente (A) o Descendente (D): ").strip().lower()
-    descendente = direccion == "d"
+    while True:
+        direccion = input("Ascendente (A) o Descendente (D): ").strip().lower()
+
+        if direccion == "a":
+            descendente = False
+            break
+        elif direccion == "d":
+            descendente = True
+            break
+        else:
+            print("Debe ingresar A o D.")
 
     ordenados = sorted(paises, key=lambda pais: pais[campo], reverse=descendente)
     mostrar_paises(ordenados)
@@ -175,7 +195,7 @@ def mostrar_estadisticas(paises):
 
 def mostrar_menu():
     print("\nSistema de gestión de países.")
-    print("1. Mostrar todos los países.")
+    print("\n1. Mostrar todos los países.")
     print("2. Agregar país.")
     print("3. Actualizar país.")
     print("4. Buscar país por nombre.")
@@ -186,6 +206,7 @@ def mostrar_menu():
     print("9. Mostrar estadísticas.")
     print("0. Salir.")
 
+#Esta es la función principal: carga datos, muestra el menú y ejecuta las opciones.
 def main():
     paises = leer_paises()
 
@@ -212,7 +233,7 @@ def main():
         elif opcion == "9":
             mostrar_estadisticas(paises)
         elif opcion == "0":
-            print("Programa finalizado.")
+            print("\nPrograma finalizado.")
             break
         else:
             print("Opción inválida. Intente nuevamente.")
